@@ -114,8 +114,10 @@
   ext <- ifelse(all(tolower(image_info(x)$format) == "gif"), "gif", "png")
   plot_counter <- getFromNamespace('plot_counter', 'knitr')
   tmp <- knitr::fig_path(ext, number = plot_counter())
-  dir.create(dirname(tmp), showWarnings = FALSE, recursive = TRUE)
-  image_write(x, path = tmp, format = ext)
+  base.dir <- knitr::opts_knit$get("base.dir")
+  tmp_path <- ifelse(is.character(base.dir), file.path(base.dir, tmp), tmp)
+  dir.create(dirname(tmp_path), showWarnings = FALSE, recursive = TRUE)
+  image_write(x, path = tmp_path, format = ext)
   knitr::include_graphics(tmp)
 }
 
